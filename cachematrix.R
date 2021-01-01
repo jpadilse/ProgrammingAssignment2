@@ -1,15 +1,37 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Cached matrix inversion functions for programming assignment 2
+  ## demonstrates lexical scoping
 
-## Write a short comment describing this function
+## Creates a matrix with getters and setters so regetting of an
+  ## inverse matrix gets result form cache instead of recalculating
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(mat = matrix()) {
+  inv <- NULL
+  set <- function(mtrx) {
+    mat <<- mtrx
+    inv <<- NULL
+  }
+  get <- function() mat
+  setInverse <- function(inverse) inv <<- inverse
+  getInverse <- function() inv
+  list(
+    set = set,
+    get = get,
+    setInverse = setInverse,
+    getInverse = getInverse
+  )
 }
 
-
-## Write a short comment describing this function
+## Cache solves the inverse of a matrix if already calculated
+  ## returns cached results instead
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  inv <- x$getInverse()
+  if (!is.null(inv)) {
+    message("Getting cached data")
+    return(inv)
+  }
+  data <- x$get()
+  inv <- solve(data, ...)
+  x$setInverse(inv)
+  inv
 }
